@@ -6,7 +6,7 @@ class KHeap
 {
 private:
     vector<int> elements_;
-    ssize_t size_;
+    size_t size_;
 
     void heapify(int i) // 感觉叫做downfilter更好
     {
