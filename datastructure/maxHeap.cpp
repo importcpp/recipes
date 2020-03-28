@@ -8,7 +8,7 @@ private:
     vector<int> elements_;
     ssize_t size_;
 
-    void downfilter(int i)
+    void heapify(int i) // 感觉叫做downfilter更好
     {
         while ((2 * i + 1) < size_)
         {
@@ -39,31 +39,12 @@ public:
     KHeap() : elements_(), size_(0) {}
 
     // 堆的初始化函数，用无序数组来初始化，排列成有序数组的时间复杂度为O(N)
-    // 只要弄清楚堆对应的索引 然后判断什么时候上滤什么时候下滤，便可快速完成堆的调整
+    // 只要弄清楚堆对应的索引 完成堆的调整即可
     KHeap(vector<int> &data) : elements_(data), size_(data.size())
     {
-        // Todo
         for (int i = size_ / 2 - 1; i >= 0; --i)
         {
-            // 第一个可能只有一个左儿子
-            if ((2 * i + 2) == size_)
-            {
-                if (elements_[2 * i + 1] > elements_[i])
-                {
-                    swap(elements_[2 * i + 1], elements_[i]);
-                }
-                continue;
-            }
-
-            int maxChild = max(elements_[2 * i + 1], elements_[2 * i + 2]);
-            if (maxChild <= elements_[i])
-            {
-                continue;
-            }
-
-            int maxChildIdx = (elements_[2 * i + 1] == maxChild) ? (2 * i + 1) : (2 * i + 2);
-            swap(elements_[maxChildIdx], elements_[i]);
-            downfilter(maxChildIdx);
+            heapify(i);
         }
     }
     ~KHeap() {}
@@ -92,7 +73,7 @@ public:
         // 取出最后一个元素，并且 size_减去1
         elements_[0] = elements_[--size_];
 
-        downfilter(0);
+        heapify(0);
         return ret;
     }
 
