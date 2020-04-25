@@ -10,27 +10,53 @@ private:
 
     void heapify(int i) // 感觉叫做downfilter更好
     {
-        while ((2 * i + 1) < size_)
+        int largest = i; // 将最大元素设置为堆顶元素
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < size_ && elements_[left] < elements_[largest])
         {
-            // 父节点和子节点之间的比较
-            int maxChild;
-            if ((2 * i + 2) == size_)
+            largest = left;
+        }
+
+        if (right < size_ && elements_[right] < elements_[largest])
+        {
+            largest = right;
+        }
+
+        if (largest != i)
+        {
+            swap(elements_[i], elements_[largest]);
+
+            // 递归地定义子堆
+            heapify(largest);
+        }
+    }
+
+    void heapifyIteration(int i) // 感觉叫做downfilter更好
+    {
+        while (2 * i + 1 < size_)
+        {
+            int largest = i; // 将最大元素设置为堆顶元素
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+
+            if (left < size_ && elements_[left] > elements_[largest])
             {
-                maxChild = elements_[2 * i + 1];
-            }
-            else
-            {
-                maxChild = max(elements_[2 * i + 1], elements_[2 * i + 2]);
+                largest = left;
             }
 
-            if (elements_[i] >= maxChild)
+            if (right < size_ && elements_[right] > elements_[largest])
+            {
+                largest = right;
+            }
+
+            if (largest == i)
             {
                 break;
             }
-
-            int maxChildIdx = (elements_[2 * i + 1] == maxChild) ? (2 * i + 1) : (2 * i + 2);
-            swap(elements_[maxChildIdx], elements_[i]);
-            i = maxChildIdx;
+            swap(elements_[i], elements_[largest]);
+            i = largest;
         }
     }
 
@@ -55,10 +81,13 @@ public:
         {
             elements_.push_back(value);
         }
-        int i = ++size_ - 1;
-        for (; (((i - 1) / 2) >= 0) && elements_[(i - 1) / 2] < elements_[i]; i = (i - 1) / 2)
+        int i = size_++;
+        int parent = (i - 1) / 2;
+        while (parent >= 0 && elements_[parent] < elements_[i])
         {
-            swap(elements_[(i - 1) / 2], elements_[i]);
+            swap(elements_[parent], elements_[i]);
+            i = parent;
+            parent = (i - 1) / 2;
         }
     }
 
